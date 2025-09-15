@@ -1,7 +1,8 @@
 const express = require("express");
+require("dotenv").config();
 const admin = require("firebase-admin");
 const cors = require("cors");
-const serviceAccount = require("./serviceAccountKey.json");
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -14,7 +15,7 @@ app.use(express.json());
 // Middleware: simple check for admin auth
 const adminAuthMiddleware = (req, res, next) => {
   const apiKey = req.headers["x-api-key"];
-  if (apiKey === "My_Admin_key_is_best") {
+  if (apiKey === process.env.MY_ADMIN_KEY) {
     next();
   } else {
     res.status(403).json({ error: "Unauthorized" });
