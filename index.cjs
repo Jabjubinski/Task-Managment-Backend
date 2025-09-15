@@ -23,7 +23,20 @@ const adminAuthMiddleware = (req, res, next) => {
 
 // CREATE USER
 app.post("/createUser", adminAuthMiddleware, async (req, res) => {
-  const { email, password, name, surname, department, role } = req.body;
+  const {
+    email,
+    password,
+    name,
+    surname,
+    department,
+    role,
+    position,
+    company,
+    languages,
+    telephone,
+    employmentType,
+    location,
+  } = req.body;
 
   try {
     const userRecord = await admin.auth().createUser({
@@ -38,6 +51,15 @@ app.post("/createUser", adminAuthMiddleware, async (req, res) => {
       surname,
       department,
       role,
+      position,
+      company,
+      languages,
+      telephone,
+      employmentType,
+      location,
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      isOnline: false,
+      presenceState: "offline",
     };
 
     await admin
@@ -55,6 +77,15 @@ app.post("/createUser", adminAuthMiddleware, async (req, res) => {
         surname,
         department,
         role,
+        position,
+        company,
+        languages,
+        telephone,
+        employmentType,
+        location,
+        createdAt: new Date().toISOString(),
+        isOnline: false,
+        presenceState: "offline",
       },
       message: "User created",
     });
